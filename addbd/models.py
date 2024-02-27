@@ -8,9 +8,10 @@ rejected = 'RD'
 STATUS = [
     (new, 'новая запись'),
     (pending, 'модератор взял в работу'),
-    (accepted,  'модерация прошла успешно'),
+    (accepted, 'модерация прошла успешно'),
     (rejected, 'модерация прошла, информация не принята'),
 ]
+
 
 class Users(models.Model):
     email = models.CharField(max_length=10000, unique=True)
@@ -27,7 +28,6 @@ class Coordinates(models.Model):
 
 
 class Passes(models.Model):
-
     new = 'NW'
     pending = 'PG'
     accepted = 'AD'
@@ -50,4 +50,3 @@ class Passes(models.Model):
 class Images(models.Model):
     name = models.CharField(max_length=10000)
     passes = models.ForeignKey(Passes, on_delete=models.CASCADE)
-
