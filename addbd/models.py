@@ -14,7 +14,7 @@ STATUS = [
 
 
 class Users(models.Model):
-    email = models.CharField(max_length=10000) #unique=True)
+    email = models.CharField(max_length=10000, unique=True)
     fam = models.CharField(max_length=10000)
     name = models.CharField(max_length=10000)
     otc = models.CharField(max_length=10000)
