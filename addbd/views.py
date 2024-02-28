@@ -1,15 +1,6 @@
-from django.forms import model_to_dict
-from django.shortcuts import render
-from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Passes, Coordinates, Users, Images
-from .serializer import PassesSerializer
-
-
-# class PassesAPIView(generics.ListAPIView):
-# queryset = Passes.objects.all()
-# serializer_class = PassesSerializer
 
 
 class PassesAPIView(APIView):
