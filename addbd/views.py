@@ -3,25 +3,21 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from .models import Passes, Coordinates, Users, Images
 from .serializer import PassesSerializer
 
 
-#class PassesAPIView(generics.ListAPIView):
-    #queryset = Passes.objects.all()
-    #serializer_class = PassesSerializer
+# class PassesAPIView(generics.ListAPIView):
+# queryset = Passes.objects.all()
+# serializer_class = PassesSerializer
 
 
 class PassesAPIView(APIView):
-
     def post(self, request):
-
         set_coords = request.data['coords']
         set_level = request.data['level']
         set_user = request.data['user']
         list_image = request.data['images']
-
 
         coords_new = Coordinates.objects.create(
             latitude=set_coords['latitude'],
@@ -52,15 +48,10 @@ class PassesAPIView(APIView):
             user_id=user_new.pk
         )
 
-
         for set_image in list_image:
             image_new = Images.objects.create(
                 name=set_image['title'],
-                passes_id = passes_new.pk
+                passes_id=passes_new.pk
             )
 
-
-
-
-        return Response({'post': model_to_dict(coords_new)})
-
+        return Response(200)
