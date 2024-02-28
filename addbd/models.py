@@ -8,12 +8,13 @@ rejected = 'RD'
 STATUS = [
     (new, 'новая запись'),
     (pending, 'модератор взял в работу'),
-    (accepted,  'модерация прошла успешно'),
+    (accepted, 'модерация прошла успешно'),
     (rejected, 'модерация прошла, информация не принята'),
 ]
 
+
 class Users(models.Model):
-    email = models.CharField(max_length=10000, unique=True)
+    email = models.CharField(max_length=10000) #unique=True)
     fam = models.CharField(max_length=10000)
     name = models.CharField(max_length=10000)
     otc = models.CharField(max_length=10000)
@@ -27,7 +28,6 @@ class Coordinates(models.Model):
 
 
 class Passes(models.Model):
-
     new = 'NW'
     pending = 'PG'
     accepted = 'AD'
@@ -38,16 +38,15 @@ class Passes(models.Model):
     other_titles = models.CharField(max_length=10000)
     connect = models.CharField(max_length=10000)
     add_time = models.DateTimeField()
-    coordinates = models.ForeignKey(Coordinates, on_delete=models.CASCADE)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    coordinates = models.ForeignKey(Coordinates, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     level_winter = models.CharField(max_length=10000)
     level_summer = models.CharField(max_length=10000)
     level_autumn = models.CharField(max_length=10000)
     level_spring = models.CharField(max_length=10000)
-    status = models.CharField(max_length=256, choices=STATUS, )
+    status = models.CharField(max_length=256, choices=STATUS,)
 
 
 class Images(models.Model):
     name = models.CharField(max_length=10000)
-    passes = models.ForeignKey(Passes, on_delete=models.CASCADE)
-
+    passes = models.ForeignKey(Passes, on_delete=models.CASCADE, null=True)

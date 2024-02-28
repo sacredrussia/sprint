@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from addbd.views import PassesAPIView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/passeslist/', PassesAPIView.as_view())
 ]
