@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/passeslist/', PassesAPIView.as_view()),
     path('api/v1/passeslist/<int:pk>/', PassesAPIView.as_view()),
+    path('api/v1/passeslist/get/<int:pk>/', PassesAPIView.as_view()),
+
 ]

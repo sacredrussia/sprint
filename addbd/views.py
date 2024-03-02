@@ -7,9 +7,36 @@ from .serializers import PassesSerializer
 
 
 class PassesAPIView(APIView):
-    def get(self, request):
-        p = Passes.objects.all()
-        return Response({'posts': PassesSerializer(p, many=True).data})
+    def get(self, request, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method PUT not allowed'})
+        try:
+            inst = Passes.objects.get(pk=pk)
+        except:
+            return Response({0: 'Object does not exists'})
+        user_list = Users.objects.get(pk=inst.user_id)
+        coord_list = Coordinates.objects.get(pk=inst.coordinates_id)
+        image_list = Images.objects.all()
+        image_list_filter = image_list.filter(passes_id=inst.pk).order_by('pk')
+        return Response({'passes': model_to_dict(inst),
+                         'users': model_to_dict(user_list),
+                         'coordinates': model_to_dict(coord_list),
+                         'image1': model_to_dict(image_list_filter[0]),
+                         'image2': model_to_dict(image_list_filter[1])})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def post(self, request):
         serializer = PassesSerializer(data=request.data)
@@ -65,7 +92,6 @@ class PassesAPIView(APIView):
                 return Response({0: 'Incorrect moderation status'})
         except:
             return Response({0: 'Object does not exists'})
-        print(inst)
 
         set_coords = request.data['coords']
         set_level = request.data['level']
@@ -101,14 +127,10 @@ class PassesAPIView(APIView):
 
         image = Images.objects.all()
         set_mod_images = image.filter(passes_id=inst.pk).order_by('pk')
-        print(set_mod_images)
         b = 0
         for set_image in list_image:
-            print(set_image)
             one_mod = set_mod_images[b]
-            print(one_mod)
             get_mod = Images.objects.get(pk=one_mod.pk)
-            print(one_mod)
             get_mod.name = set_image['title']
             get_mod.save()
             b = b + 1
