@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from addbd.views import PassesAPIView
+from addbd.views import PassesAPIView, EmailAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/passeslist/', PassesAPIView.as_view()),
-    path('api/v1/passeslist/<int:pk>/', PassesAPIView.as_view()),
+    path('api/v1/passeslist/put/<int:pk>/', PassesAPIView.as_view()),
     path('api/v1/passeslist/get/<int:pk>/', PassesAPIView.as_view()),
+    path('api/v1/passeslist/get/<str:email>/', EmailAPIView.as_view()),
 
 ]

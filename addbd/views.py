@@ -25,19 +25,6 @@ class PassesAPIView(APIView):
                          'image1': model_to_dict(image_list_filter[0]),
                          'image2': model_to_dict(image_list_filter[1])})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     def post(self, request):
         serializer = PassesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -85,7 +72,7 @@ class PassesAPIView(APIView):
         pk = kwargs.get('pk', None)
         stat = 'new'
         if not pk:
-            return Response({'error': 'Method PUT not allowed'})
+            return Response({'error': 'Method GET not allowed'})
         try:
             inst = Passes.objects.get(pk=pk)
             if inst.status != stat:
@@ -135,3 +122,25 @@ class PassesAPIView(APIView):
             get_mod.save()
             b = b + 1
         return Response(1)
+
+
+class EmailAPIView(APIView):
+    def get(self, request, **kwargs):
+        email = kwargs.get('email', None)
+        if not email:
+            return Response({'error': 'Method PUT not allowed'})
+        try:
+            inst = Users.objects.get(email=email)
+        except:
+            return Response({0: 'Object does not exists'})
+        user_list = inst
+        passes_list = Passes.objects.get(user_id=inst.pk)
+        coord_list = Coordinates.objects.get(pk=passes_list.coordinates_id)
+        image_list = Images.objects.all()
+        image_list_filter = image_list.filter(passes_id=passes_list.pk).order_by('pk')
+        return Response({'passes': model_to_dict(passes_list),
+                         'users': model_to_dict(user_list),
+                         'coordinates': model_to_dict(coord_list),
+                         'image1': model_to_dict(image_list_filter[0]),
+                         'image2': model_to_dict(image_list_filter[1])})
+
