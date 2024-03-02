@@ -24,6 +24,6 @@ urlpatterns = [
     path('api/v1/passeslist/', PassesAPIView.as_view()),
     path('api/v1/passeslist/put/<int:pk>/', PassesAPIView.as_view()),
     path('api/v1/passeslist/get/<int:pk>/', PassesAPIView.as_view()),
-    path('api/v1/passeslist/get/<str:email>/', EmailAPIView.as_view()),
+    path('api/v1/passeslist/user_email/<str:email>/', EmailAPIView.as_view()),
 
 ]
