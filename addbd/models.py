@@ -33,7 +33,7 @@ class Passes(models.Model):
     accepted = 'AD'
     rejected = 'RD'
 
-    beautyTitle = models.CharField(max_length=10000)
+    beauty_title = models.CharField(max_length=10000)
     title = models.CharField(max_length=10000)
     other_titles = models.CharField(max_length=10000)
     connect = models.CharField(max_length=10000)
