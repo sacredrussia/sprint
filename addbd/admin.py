@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from addbd.models import Passes
+
+admin.site.register(Passes)
