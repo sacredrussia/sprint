@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Passes, Coordinates, Users, Images
 from rest_framework import generics
-from .serializers import PassesSerializer
+from .serializers import PassesSerializer, UserSerializer
 
 
 class PassesAPIView(APIView):
@@ -28,47 +28,85 @@ class PassesAPIView(APIView):
     def post(self, request):
         serializer = PassesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer1 = UserSerializer(data=request.data['user'])
+        serializer1.is_valid(raise_exception=True)
 
         set_coords = request.data['coords']
         set_level = request.data['level']
         set_user = request.data['user']
         list_image = request.data['images']
+        try:
+            inst = Users.objects.get(email=set_user['email'])
+            if inst.email == set_user['email']:
+                set_coords = request.data['coords']
+                set_level = request.data['level']
+                list_image = request.data['images']
 
-        coords_new = Coordinates.objects.create(
-            latitude=set_coords['latitude'],
-            longitude=set_coords['longitude'],
-            height=set_coords['height']
-        )
-        user_new = Users.objects.create(
-            email=set_user['email'],
-            fam=set_user['fam'],
-            name=set_user['name'],
-            otc=set_user['otc'],
-            phone=set_user['phone'],
-        )
-        passes_new = Passes.objects.create(
-            beauty_title=request.data['beauty_title'],
-            title=request.data['title'],
-            other_titles=request.data['other_titles'],
-            connect=request.data['connect'],
-            add_time=request.data['add_time'],
-            level_winter=set_level['winter'],
-            level_summer=set_level['summer'],
-            level_autumn=set_level['autumn'],
-            level_spring=set_level['spring'],
-            status='new',
-            coordinates_id=coords_new.pk,
-            user_id=user_new.pk
-        )
-        for set_image in list_image:
-            image_new = Images.objects.create(
-                name=set_image['title'],
-                passes_id=passes_new.pk
+                coords_new = Coordinates.objects.create(
+                    latitude=set_coords['latitude'],
+                    longitude=set_coords['longitude'],
+                    height=set_coords['height']
+                )
+
+                passes_new = Passes.objects.create(
+                    beauty_title=request.data['beauty_title'],
+                    title=request.data['title'],
+                    other_titles=request.data['other_titles'],
+                    connect=request.data['connect'],
+                    add_time=request.data['add_time'],
+                    level_winter=set_level['winter'],
+                    level_summer=set_level['summer'],
+                    level_autumn=set_level['autumn'],
+                    level_spring=set_level['spring'],
+                    status='new',
+                    coordinates_id=coords_new.pk,
+                    user_id=inst.pk
+                )
+                for set_image in list_image:
+                    image_new = Images.objects.create(
+                        name=set_image['title'],
+                        passes_id=passes_new.pk
+                    )
+                return Response({2: 'from email add new passes'})
+
+        except:
+            user_new = Users.objects.create(
+                email=set_user['email'],
+                fam=set_user['fam'],
+                name=set_user['name'],
+                otc=set_user['otc'],
+                phone=set_user['phone'],
             )
 
-        return Response({'posts': 200})
+            coords_new = Coordinates.objects.create(
+                latitude=set_coords['latitude'],
+                longitude=set_coords['longitude'],
+                height=set_coords['height']
+            )
 
-    def put(self, request, *args, **kwargs):
+            passes_new = Passes.objects.create(
+                beauty_title=request.data['beauty_title'],
+                title=request.data['title'],
+                other_titles=request.data['other_titles'],
+                connect=request.data['connect'],
+                add_time=request.data['add_time'],
+                level_winter=set_level['winter'],
+                level_summer=set_level['summer'],
+                level_autumn=set_level['autumn'],
+                level_spring=set_level['spring'],
+                status='new',
+                coordinates_id=coords_new.pk,
+                user_id=user_new.pk
+            )
+            list_image = request.data['images']
+            for set_image in list_image:
+                image_new = Images.objects.create(
+                    name=set_image['title'],
+                    passes_id=passes_new.pk
+                )
+            return Response({1: 'add new email and add new passes'})
+
+    def patch(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         stat = 'new'
         if not pk:
@@ -149,56 +187,3 @@ class EmailAPIView(APIView):
                          'users': model_to_dict(user_list),
                          'coordinates': set_coords,
                          'images': set_images})
-
-    def post(self, request, *args, **kwargs):
-        email = kwargs.get('email', None)
-        if not email:
-            return Response({'error': 'Method POST not allowed'})
-        try:
-            inst = Users.objects.get(email=email)
-        except:
-            return Response({0: 'Object does not exists'})
-
-        set_coords = request.data['coords']
-        set_level = request.data['level']
-        list_image = request.data['images']
-
-        coords_new = Coordinates.objects.create(
-            latitude=set_coords['latitude'],
-            longitude=set_coords['longitude'],
-            height=set_coords['height']
-        )
-
-        passes_new = Passes.objects.create(
-            beauty_title=request.data['beauty_title'],
-            title=request.data['title'],
-            other_titles=request.data['other_titles'],
-            connect=request.data['connect'],
-            add_time=request.data['add_time'],
-            level_winter=set_level['winter'],
-            level_summer=set_level['summer'],
-            level_autumn=set_level['autumn'],
-            level_spring=set_level['spring'],
-            status='new',
-            coordinates_id=coords_new.pk,
-            user_id=inst.pk
-        )
-        for set_image in list_image:
-            image_new = Images.objects.create(
-                name=set_image['title'],
-                passes_id=passes_new.pk
-            )
-
-        return Response({'posts': 200})
-
-
-class StatusAPIView(APIView):
-    def get(self, request, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': 'Method GET not allowed'})
-        try:
-            inst = Passes.objects.get(pk=pk)
-        except:
-            return Response({0: 'Object does not exists'})
-        return Response({'status': model_to_dict(inst)['status']})

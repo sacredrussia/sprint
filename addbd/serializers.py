@@ -18,4 +18,8 @@ class PassesSerializer(serializers.Serializer):
     status = serializers.CharField(max_length=10000, read_only=True)
 
 
+class UserSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=10000)
+
+
 
