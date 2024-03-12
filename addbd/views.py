@@ -169,9 +169,7 @@ class EmailAPIView(APIView):
         set_coords = []
         for j in passes_list:
             e = model_to_dict(j)
-            print(e)
             set_passes.append(e)
-            print(set_passes)
             coords = Coordinates.objects.all()
             coord_list = coords.filter(pk=j.coordinates_id).order_by('pk')
             for f in coord_list:

@@ -1,5 +1,5 @@
 """
-URL configuration for NewProj project.
+URL configuration for NewProjs project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -21,8 +21,8 @@ from addbd.views import PassesAPIView, EmailAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/passeslist/get/<int:pk>/', PassesAPIView.as_view()),
-    path('api/v1/passeslist/put/<int:pk>/', PassesAPIView.as_view()),
-    path('api/v1/passeslist/patch/<int:pk>/', PassesAPIView.as_view()),
-    path('api/v1/passeslist/user_email/<str:email>/', EmailAPIView.as_view()),
+    path('api/v1/passeslist/', PassesAPIView.as_view(), name='post_passes'),
+    path('api/v1/passeslist/<int:pk>/', PassesAPIView.as_view(), name='get_passes_pk'),
+    path('api/v1/passeslist/patch/<int:pk>/', PassesAPIView.as_view(), name='path_passes_pk'),
+    path('api/v1/passeslist/user_email/<str:email>/', EmailAPIView.as_view(), name='get_passes_email'),
 ]
