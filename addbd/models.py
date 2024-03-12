@@ -35,15 +35,15 @@ class Passes(models.Model):
 
     beauty_title = models.CharField(max_length=10000)
     title = models.CharField(max_length=10000)
-    other_titles = models.CharField(max_length=10000)
-    connect = models.CharField(max_length=10000)
+    other_titles = models.CharField(max_length=10000, blank=True)
+    connect = models.CharField(max_length=10000, blank=True)
     add_time = models.DateTimeField()
     coordinates = models.ForeignKey(Coordinates, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
-    level_winter = models.CharField(max_length=10000)
-    level_summer = models.CharField(max_length=10000)
-    level_autumn = models.CharField(max_length=10000)
-    level_spring = models.CharField(max_length=10000)
+    level_winter = models.CharField(max_length=10000, blank=True)
+    level_summer = models.CharField(max_length=10000, blank=True)
+    level_autumn = models.CharField(max_length=10000, blank=True)
+    level_spring = models.CharField(max_length=10000, blank=True)
     status = models.CharField(max_length=256, choices=STATUS,)
 
 

@@ -192,3 +192,13 @@ class EmailAPIView(APIView):
         return Response({'posts': 200})
 
 
+class StatusAPIView(APIView):
+    def get(self, request, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method GET not allowed'})
+        try:
+            inst = Passes.objects.get(pk=pk)
+        except:
+            return Response({0: 'Object does not exists'})
+        return Response({'status': model_to_dict(inst)['status']})

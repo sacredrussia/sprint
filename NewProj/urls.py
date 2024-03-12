@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from addbd.views import PassesAPIView, EmailAPIView
+from addbd.views import PassesAPIView, EmailAPIView, StatusAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/v1/passeslist/put/<int:pk>/', PassesAPIView.as_view()),
     path('api/v1/passeslist/get/<int:pk>/', PassesAPIView.as_view()),
     path('api/v1/passeslist/user_email/<str:email>/', EmailAPIView.as_view()),
+    path('api/v1/passeslist/get_status/<int:pk>/', StatusAPIView.as_view()),
 
 ]
